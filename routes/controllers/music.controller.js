@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
 
 const Music = require('../../models/Music');
+const { DefaultError, ExistingDataError } = require('../../lib/errors');
 
 exports.createMusic = async (req, res, next) => {
   try {
     const { title } = req.body;
 
     if (await Music.exists({ title })) {
-      return next('err');
+      return next(new ExistingDataError());
     }
 
     const newMusic = await Music.create({
@@ -19,6 +20,6 @@ exports.createMusic = async (req, res, next) => {
       data: newMusic,
     });
   } catch (err) {
-    next(err);
+    next(new DefaultError());
   }
 };
