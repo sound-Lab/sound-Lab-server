@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
 const Music = require('../../models/Music');
+const Instrument = require('../../models/Instrument');
+
 const {
   DefaultError,
   NotFoundError,
@@ -37,6 +39,20 @@ exports.getMusicData = async (req, res, next) => {
     res.json({
       result: 'ok',
       data: musicData,
+    });
+  } catch (err) {
+    next(new DefaultError());
+  }
+};
+
+exports.getInstrumentData = async (req, res, next) => {
+  try {
+    const { tool } = req.body;
+    const soundList = await Instrument.findOne({ name: tool });
+
+    res.json({
+      result: 'ok',
+      data: soundList,
     });
   } catch (err) {
     next(new DefaultError());
