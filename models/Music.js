@@ -13,10 +13,12 @@ const musicSchema = new mongoose.Schema({
   },
   tracks: [
     {
-      instrument: {
+      name: {
         type: String,
       },
-      track: [],
+      codeName: [],
+      midiSteps: [],
+      stepsMap: [],
     },
   ],
 });
