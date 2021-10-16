@@ -56,14 +56,38 @@ exports.getInstrumentData = async (req, res, next) => {
     const { name, sound } = soundList;
     const codes = sound.map((sound) => sound.code);
     const samplerList = {};
-    sound.forEach(({ sound: { code, url } }) => {
+
+    sound.forEach((sound) => {
+      const { code, url } = sound;
       samplerList[code] = url;
     });
-    const result = {};
 
-    result[name] = { codes, samplerList };
+    const result = {};
+    result[name] = { name, codes, samplerList };
 
     res.json(result);
+  } catch (err) {
+    next(new DefaultError());
+  }
+};
+
+exports.updateMusic = async (req, res, next) => {
+  try {
+    const { musicId } = req.params;
+    const { tracks } = req.body;
+    const targetMusic = await Music.findById(musicId);
+
+    if (!targetMusic) {
+      return next(new NotFoundError());
+    }
+
+    targetMusic.tracks = tracks;
+
+    await targetMusic.save(tracks);
+
+    res.json({
+      result: 'ok',
+    });
   } catch (err) {
     next(new DefaultError());
   }
