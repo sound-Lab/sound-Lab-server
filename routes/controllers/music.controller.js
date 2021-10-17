@@ -46,26 +46,32 @@ exports.getMusicData = async (req, res, next) => {
 
 exports.getInstrumentData = async (req, res, next) => {
   try {
-    const { tool } = req.params;
-    const soundList = await Instrument.findOne({ name: tool });
+    const soundList = await Instrument.find().lean().exec();
 
     if (!soundList) {
       return next(new NotFoundError());
     }
 
-    const { name, sound } = soundList;
-    const codes = sound.map((sound) => sound.code);
-    const samplerList = {};
+    const sampleSound = soundList.map((instrument) => {
+      const { name, sound } = instrument;
 
-    sound.forEach((sound) => {
-      const { code, url } = sound;
-      samplerList[code] = url;
+      const codes = sound.map((sound) => sound.code);
+      const samplerList = {};
+
+      sound.forEach((sound) => {
+        const { code, url } = sound;
+        samplerList[code] = url;
+      });
+
+      const result = {};
+
+      return (result[name] = { name, codes, samplerList });
     });
 
-    const result = {};
-    result[name] = { name, codes, samplerList };
-
-    res.json(result);
+    res.json({
+      result: 'ok',
+      data: sampleSound,
+    });
   } catch (err) {
     next(new DefaultError());
   }
