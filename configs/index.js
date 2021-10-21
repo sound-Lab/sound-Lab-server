@@ -6,5 +6,4 @@ module.exports = {
     origin: '*',
     optionsSuccessStatus: 200,
   },
-  tokenSecretKey: process.env.TOKEN_SECRET_KEY,
 };
