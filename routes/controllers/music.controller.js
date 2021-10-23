@@ -85,12 +85,7 @@ exports.getInstrumentData = async (req, res, next) => {
 exports.updateMusic = async (req, res, next) => {
   try {
     const { musicId } = req.params;
-<<<<<<< Updated upstream
     const { tracks } = req.body;
-=======
-    const { tracks, title } = req.body;
-    console.log(tracks);
->>>>>>> Stashed changes
     const targetMusic = await Music.findById(musicId);
 
     if (!targetMusic) {
