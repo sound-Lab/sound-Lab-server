@@ -11,7 +11,7 @@ const {
 
 exports.createMusic = async (req, res, next) => {
   try {
-    const { title } = req.body;
+    const { title, initialTracks } = req.body;
 
     if (await Music.exists({ title })) {
       return next(new ExistingDataError());
@@ -19,6 +19,7 @@ exports.createMusic = async (req, res, next) => {
 
     const newMusic = await Music.create({
       title,
+      tracks: initialTracks,
     });
 
     res.json({
@@ -34,6 +35,10 @@ exports.getMusicData = async (req, res, next) => {
   try {
     const { musicId } = req.params;
     const musicData = await Music.findById(musicId);
+
+    if (!musicData) {
+      return next(new NotFoundError());
+    }
 
     res.json({
       result: 'ok',
