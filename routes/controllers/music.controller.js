@@ -86,6 +86,7 @@ exports.updateMusic = async (req, res, next) => {
   try {
     const { musicId } = req.params;
     const { tracks } = req.body;
+
     const targetMusic = await Music.findById(musicId);
 
     if (!targetMusic) {

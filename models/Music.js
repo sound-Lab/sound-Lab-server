@@ -17,8 +17,8 @@ const musicSchema = new mongoose.Schema({
         type: String,
       },
       codeName: [],
-      midiSteps: [],
-      stepsMap: [],
+      bars: [],
+      steps: [],
     },
   ],
 });
