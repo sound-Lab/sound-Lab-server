@@ -85,8 +85,7 @@ exports.getInstrumentData = async (req, res, next) => {
 exports.updateMusic = async (req, res, next) => {
   try {
     const { musicId } = req.params;
-    const { tracks } = req.body;
-
+    const { tracks, title } = req.body;
     const targetMusic = await Music.findById(musicId);
 
     if (!targetMusic) {
@@ -94,8 +93,26 @@ exports.updateMusic = async (req, res, next) => {
     }
 
     targetMusic.tracks = tracks;
+    targetMusic.title = title;
 
     await targetMusic.save(tracks);
+
+    res.json({
+      result: 'ok',
+    });
+  } catch (err) {
+    next(new DefaultError());
+  }
+};
+
+exports.deleteMusic = async (req, res, next) => {
+  try {
+    const { musicId } = req.params;
+    const targetMusic = await Music.findByIdAndRemove(musicId);
+
+    if (!targetMusic) {
+      return next(new NotFoundError());
+    }
 
     res.json({
       result: 'ok',
